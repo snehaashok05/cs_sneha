@@ -1,0 +1,22 @@
+import cv2
+import os
+
+cap=cv2.VideoCapture(0)
+cascade=cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+
+while True:
+    r,f=cap.read()
+    g=cv2.cvtColor(f,cv2.COLOR_BGR2GRAY)
+    full=cascade.detectMultiScale(g,1.3,5)
+    for(x,y,w,h) in full:
+        cv2.rectangle(f,(x,y),(x+w,y+h),(0,0,255),2)
+        
+    cv2.imshow("face",f)
+    if cv2.waitKey(1) & 0XFF == ord('p'):
+        cv2.imwrite(f"photo_{len(os.listdir()):04d}.jpg",f)
+        print('photo saved')
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+cap.release()
+cv2.destroyAllWindows()
